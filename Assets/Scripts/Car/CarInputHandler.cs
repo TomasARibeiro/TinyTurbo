@@ -1,11 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CarInputHandler : MonoBehaviour
+public class CarInputHandler : NetworkBehaviour
 {
     //components
     private TopDownCarController _topDownCarController;
+
+	public override void OnNetworkSpawn()
+	{
+		if (!IsOwner)
+		{
+			enabled = false;
+			return;
+		}
+	}
 
 	private void Awake()
 	{

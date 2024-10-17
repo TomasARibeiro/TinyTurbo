@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class TopDownCarController : MonoBehaviour
+public class TopDownCarController : NetworkBehaviour
 {
     [Header("Car Settings")]
     public float AccelerationFactor = 5.0f; //how fast the car accelerates
@@ -16,22 +17,21 @@ public class TopDownCarController : MonoBehaviour
     private float _velocityVsUp = 0f;
 
     //components
-    private Rigidbody2D _carRigidBody2D;
+    public Rigidbody2D _carRigidBody2D;
+
+	public override void OnNetworkSpawn()
+	{
+		if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+	}
 
 	private void Awake()
 	{
 		_carRigidBody2D = GetComponent<Rigidbody2D>();
 	}
-
-	void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 
 	private void FixedUpdate()
 	{
@@ -103,30 +103,59 @@ public class TopDownCarController : MonoBehaviour
         return Vector2.Dot(transform.right, _carRigidBody2D.velocity);
     }
 
-    public bool IsTiresScreeching(out float lateralVelocity, out bool isBraking)
+	public bool IsTiresScreeching(out float lateralVelocity, out bool isBraking)
+	{
+		lateralVelocity = GetLateralVelocity();
+		isBraking = false;
+
+		// Check if the player is braking while moving forward
+		if (_accelerationInput < 0 && _velocityVsUp > 0)
+		{
+			isBraking = true;
+			return true;
+		}
+
+		// Check if the car is drifting or sliding sideways
+		float lateralThreshold = 1.0f; // Adjust threshold as needed
+		if (Mathf.Abs(lateralVelocity) > lateralThreshold)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
+	//[ServerRpc]
+	/*private bool IsTiresScreechingServerRPC(out float lateralVelocity, out bool isBraking)
     {
-        lateralVelocity = GetLateralVelocity();
+		lateralVelocity = GetLateralVelocity();
         isBraking = false;
 
-        //check if we are moving forward and if the player is hitting the brakes, if so the tires should screech
-        if (_accelerationInput < 0 && _velocityVsUp > 0)
-        {
-            isBraking = true;
-            return true;
-        }
+		//check if we are moving forward and if the player is hitting the brakes, if so the tires should screech
+		if (_accelerationInput < 0 && _velocityVsUp > 0)
+		{
+			isBraking = true;
+			return true;
+		}
 
-        //if we have a lot of side movement then the tires should be screeching
-        float lateralThreshold = 2.0f;
-        if (Mathf.Abs(GetLateralVelocity()) > lateralThreshold)
-            return true;
+		//if we have a lot of side movement then the tires should be screeching
+		float lateralThreshold = 2.0f;
+		if (Mathf.Abs(GetLateralVelocity()) > lateralThreshold)
+			return true;
 
-        return false;
-    }
+		return false;
+	}*/
 
-    public void SetInputVector(Vector2 inputVector)
+	public void SetInputVector(Vector2 inputVector)
     {
-        _steeringInput = inputVector.x; //accelerate or decelerate
-        _accelerationInput = inputVector.y; //steer right or left
-    }
+		_steeringInput = inputVector.x; //accelerate or decelerate
+		_accelerationInput = inputVector.y; //steer right or left
+	}
 
+    [ServerRpc]
+    private void SetInputVectorServerRPC(Vector2 inputVector)
+    {
+		
+	}
 }
