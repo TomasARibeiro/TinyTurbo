@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class TopDownCarController : NetworkBehaviour
+public class TopDownCarController : MonoBehaviour //NetworkBehaviour
 {
     [Header("Car Settings")]
     public float AccelerationFactor = 5.0f; //how fast the car accelerates
@@ -19,14 +19,14 @@ public class TopDownCarController : NetworkBehaviour
     //components
     public Rigidbody2D _carRigidBody2D;
 
-	public override void OnNetworkSpawn()
+	/*public override void OnNetworkSpawn()
 	{
 		if (!IsOwner)
         {
             enabled = false;
             return;
         }
-	}
+	}*/
 
 	private void Awake()
 	{
@@ -125,37 +125,9 @@ public class TopDownCarController : NetworkBehaviour
 		return false;
 	}
 
-
-	//[ServerRpc]
-	/*private bool IsTiresScreechingServerRPC(out float lateralVelocity, out bool isBraking)
-    {
-		lateralVelocity = GetLateralVelocity();
-        isBraking = false;
-
-		//check if we are moving forward and if the player is hitting the brakes, if so the tires should screech
-		if (_accelerationInput < 0 && _velocityVsUp > 0)
-		{
-			isBraking = true;
-			return true;
-		}
-
-		//if we have a lot of side movement then the tires should be screeching
-		float lateralThreshold = 2.0f;
-		if (Mathf.Abs(GetLateralVelocity()) > lateralThreshold)
-			return true;
-
-		return false;
-	}*/
-
 	public void SetInputVector(Vector2 inputVector)
     {
 		_steeringInput = inputVector.x; //accelerate or decelerate
 		_accelerationInput = inputVector.y; //steer right or left
-	}
-
-    [ServerRpc]
-    private void SetInputVectorServerRPC(Vector2 inputVector)
-    {
-		
 	}
 }

@@ -4,20 +4,20 @@ using Unity.Netcode;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-public class WheelTrailRendererHandler : NetworkBehaviour
+public class WheelTrailRendererHandler : MonoBehaviour//NetworkBehaviour
 {
 	// Components
 	private TopDownCarController _topDownCarController;
 	private TrailRenderer _trailRenderer;
 
-	public override void OnNetworkSpawn()
+	/*public override void OnNetworkSpawn()
 	{
 		if (!IsOwner)
 		{
 			enabled = false;
 			return;
 		}
-	}
+	}*/
 
 	private void Awake()
 	{
@@ -32,15 +32,17 @@ public class WheelTrailRendererHandler : NetworkBehaviour
 		// Check if the car tires are screeching (or braking) to emit the trail
 		if (_topDownCarController.IsTiresScreeching(out float lateralVelocity, out bool isBraking))
 		{
-			SetEmittingServerRpc(true);
+			_trailRenderer.emitting = true;
+			//SetEmittingServerRpc(true);
 		}
 		else
 		{
-			SetEmittingServerRpc(false);
+			_trailRenderer.emitting = false;
+			//SetEmittingServerRpc(false);
 		}
 	}
 
-	[ServerRpc]
+	/*[ServerRpc]
 	private void SetEmittingServerRpc(bool isBraking)
 	{
 		// Update the trail emission state on the server and propagate it to all clients
@@ -52,5 +54,5 @@ public class WheelTrailRendererHandler : NetworkBehaviour
 	{
 		// Update the trail renderer on all clients based on the braking state
 		_trailRenderer.emitting = isBraking;
-	}
+	}*/
 }

@@ -3,52 +3,33 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CameraFollow : NetworkBehaviour
+public class CameraFollow : MonoBehaviour //NetworkBehaviour
 {
-	public override void OnNetworkSpawn()
+	/*public override void OnNetworkSpawn()
 	{
 		if (!IsOwner)
 		{
 			gameObject.SetActive(false);
 		}
-	}
+	}*/
 	//[SerializeField] private Transform _player;
-	//[SerializeField] private float _smoothTime = 0.1f;
+	//[SerializeField] private float _smoothTime = 0.3f;
 	//[SerializeField] private Vector3 _offset = new Vector3(0, 1);
 	//[SerializeField] private float _lookAheadDistance = 2;
-	//[SerializeField] private float _lookAheadSpeed = 3;
+	//[SerializeField] private float _lookAheadSpeed = 1;
 
 	//private Vector3 _velOffset;
 	//private Vector3 _vel;
 	//private TopDownCarController _topDownCarController;
-	//private Rigidbody2D _rigidBody2D;
 	//private Vector3 _lookAheadVel;
 
-	//public override void OnNetworkSpawn()
-	//{
-	//	if (!IsOwner)
-	//	{
-	//		gameObject.SetActive(false);
-	//	}
-	//}
-
-	//private void Awake()
-	//{
-	//	_topDownCarController = GetComponentInParent<TopDownCarController>();
-	//	_rigidBody2D = _topDownCarController.GetComponent<Rigidbody2D>();
-	//}
-
-	private void Update()
-	{
-		transform.rotation = Quaternion.Euler(0,0,0);
-	}
+	//private void Awake() => _player.TryGetComponent(out _topDownCarController);
 
 	//private void LateUpdate()
 	//{
-	//	if (_topDownCarController != null && _rigidBody2D != null)
+	//	if (_topDownCarController != null)
 	//	{
-	//		Debug.Log("AAAAAAAAAAA");
-	//		var projectedPos = _rigidBody2D.velocity.normalized * _lookAheadDistance;
+	//		var projectedPos = _topDownCarController._carRigidBody2D.velocity.normalized * _lookAheadDistance;
 	//		_velOffset = Vector3.SmoothDamp(_velOffset, projectedPos, ref _lookAheadVel, _lookAheadSpeed);
 	//	}
 
