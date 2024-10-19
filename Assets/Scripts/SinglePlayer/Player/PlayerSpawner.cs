@@ -11,12 +11,12 @@ public class PlayerSpawner : MonoBehaviour
 
 	private void OnEnable()
 	{
-		EventsManager.E_SpawnPlayer += HandlePlayerSpawn;
+		GameManager.E_SpawnPlayer += HandlePlayerSpawn;
 	}
 
 	private void OnDisable()
 	{
-		EventsManager.E_SpawnPlayer -= HandlePlayerSpawn;
+		GameManager.E_SpawnPlayer -= HandlePlayerSpawn;
 	}
 
 	private void HandlePlayerSpawn()

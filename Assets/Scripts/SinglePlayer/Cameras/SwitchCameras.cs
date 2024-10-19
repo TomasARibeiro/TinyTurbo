@@ -10,12 +10,12 @@ public class SwitchCameras : MonoBehaviour
 
 	private void OnEnable()
 	{
-		EventsManager.E_CameraSwitch += HandleCamerasSwitched;
+		GameManager.E_CameraSwitch += HandleCamerasSwitched;
 	}
 
 	private void OnDisable()
 	{
-		EventsManager.E_CameraSwitch -= HandleCamerasSwitched;
+		GameManager.E_CameraSwitch -= HandleCamerasSwitched;
 	}
 
 	private void Awake()
@@ -30,11 +30,13 @@ public class SwitchCameras : MonoBehaviour
 		{
 			_levelCam.SetActive(false);
 			_playerCam.SetActive(true);
+			_levelCamOn = false;
 		}
 		else
 		{
 			_playerCam.SetActive(false);
 			_levelCam.SetActive(true);
+			_levelCamOn = true;
 		}
 	}
 }

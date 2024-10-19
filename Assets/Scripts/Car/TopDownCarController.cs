@@ -35,9 +35,19 @@ public class TopDownCarController : MonoBehaviour //NetworkBehaviour
 
 	private void FixedUpdate()
 	{
-        ApplyEngineForce();
-        KillOrthogonalVelocity();
-        ApplySteering();
+
+        if (GameManager.instance.GetGameState() == GameStates.countDown)
+            return;
+        else if (GameManager.instance.GetGameState() == GameStates.raceOver)
+        {
+            StartCoroutine(FinishRaceCO());
+		}
+        else
+        {
+			ApplyEngineForce();
+			KillOrthogonalVelocity();
+			ApplySteering();
+		}
 	}
 
     private void ApplyEngineForce()
@@ -129,5 +139,11 @@ public class TopDownCarController : MonoBehaviour //NetworkBehaviour
     {
 		_steeringInput = inputVector.x; //accelerate or decelerate
 		_accelerationInput = inputVector.y; //steer right or left
+	}
+
+	IEnumerator FinishRaceCO()
+	{
+		yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
 	}
 }
