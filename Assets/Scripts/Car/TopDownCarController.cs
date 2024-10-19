@@ -35,19 +35,18 @@ public class TopDownCarController : MonoBehaviour //NetworkBehaviour
 
 	private void FixedUpdate()
 	{
-
-        if (GameManager.instance.GetGameState() == GameStates.countDown)
-            return;
-        else if (GameManager.instance.GetGameState() == GameStates.raceOver)
+        if (GameManager.Instance.GetGameState() == GameStates.RaceOver)
         {
             StartCoroutine(FinishRaceCO());
 		}
-        else
+        else if (GameManager.Instance.GetGameState() == GameStates.Racing)
         {
 			ApplyEngineForce();
 			KillOrthogonalVelocity();
 			ApplySteering();
 		}
+
+        return;
 	}
 
     private void ApplyEngineForce()

@@ -4,35 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameStates { countDown, racing, raceOver};
+public enum GameStates { Idle, InMenu, CountDown, Racing, RaceOver};
 
 public class GameManager : MonoBehaviour
 {
     //static instance so the other scripts can access it
-    public static GameManager instance = null;
+    public static GameManager Instance = null;
 
     public static event Action E_CameraSwitch; //swap cameras from track to player and vice versa
     public static event Action E_SpawnPlayer; //spawn the player
 
-    //race specific events
-    public static event Action E_CheckPointPassed;
-    public static event Action E_LapFinished;
+    #region Race Events
+    public static event Action E_CountDownBegin;
+	public static event Action E_CheckPointPassed; //passed a checkpoint
+    public static event Action E_LapFinished; //lap finished
     public static event Action E_RaceOver; //the race is over
+    public static event Action E_GamePaused;
+	#endregion
 
-    #region In Race Vars
-    public int CurrentCheckPoint = 0;
+	#region In Race Vars
+	public int CurrentCheckPoint = 0;
     public int CurrentLap = 1;
     public int MaxCheckPoints = 0;
     public int MaxLaps = 0;
+    #endregion
+
+    #region Menu Loaders
+    private Scene _selectedLevel;
 	#endregion
 
-	GameStates currentState = GameStates.countDown;
+	private GameStates _currentState = GameStates.Idle;
+    private GameStates _previousState = GameStates.Idle;
 
 	private void Awake()
 	{
-		if (instance == null)
-            instance = this;
-        else if (instance != this)
+		if (Instance == null)
+            Instance = this; 
+        else if (Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -41,29 +49,57 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 	}
 
-	private void OnEnable()
-	{
-		SceneManager.sceneLoaded += OnSceneLoaded;
-	}
-
 	void Update()
     {
+        Debug.Log("Current State: " + _currentState);
+
+        if (_currentState == GameStates.InMenu)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             E_CameraSwitch?.Invoke();
 			E_SpawnPlayer?.Invoke();
         }
+
+        //player pauses/unpauses the game
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_currentState != GameStates.InMenu) //check if the player isnt already in the menu
+            {
+                _previousState = _currentState;
+				E_GamePaused?.Invoke();
+				_currentState = GameStates.InMenu;
+			}
+            else //if he is, return to the previous state
+            {
+                _currentState = _previousState;
+                E_GamePaused?.Invoke();
+            }
+        }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        LevelStart();
-    }
-
-	void LevelStart()
+	public void OnStartedLevel()
 	{
-		currentState = GameStates.countDown;
-        Debug.Log("Level started");
+        _previousState = _currentState;
+		_currentState = GameStates.Idle;
+        Debug.Log("Level initiated");
+	}
+
+    public void OnCountDownStart()
+    {
+		Debug.Log("CountDown Started!");
+
+		_previousState = _currentState;
+		_currentState = GameStates.CountDown;
+
+		E_CountDownBegin?.Invoke();
 	}
 
     public void OnRaceStart()
@@ -72,7 +108,8 @@ public class GameManager : MonoBehaviour
 
         E_CameraSwitch?.Invoke();
         E_SpawnPlayer?.Invoke();
-		currentState = GameStates.racing;
+        _previousState = _currentState;
+		_currentState = GameStates.Racing;
     }
 
     public void OnRaceLoad(int maxLaps, int maxCheckPoints)
@@ -93,13 +130,22 @@ public class GameManager : MonoBehaviour
 
     public void OnLapFinished()
     {
-        CurrentLap++;
-		ResetCheckPoints();
-		E_LapFinished?.Invoke();
-
-        if (CurrentLap == MaxLaps) {
+        if (CurrentLap == MaxLaps)
+        {
             OnRaceFinished();
+            return;
         }
+
+        CurrentLap++;
+        ResetCheckPoints();
+        E_LapFinished?.Invoke();
+  //      CurrentLap++;
+		//ResetCheckPoints();
+		//E_LapFinished?.Invoke();
+
+  //      if (CurrentLap == MaxLaps) {
+  //          OnRaceFinished();
+  //      }
     }
 
     public void ResetCheckPoints()
@@ -109,13 +155,49 @@ public class GameManager : MonoBehaviour
 
     public void OnRaceFinished()
     {
-        currentState = GameStates.raceOver;
+        _previousState = _currentState;
+        _currentState = GameStates.RaceOver;
         E_CameraSwitch.Invoke();
         E_RaceOver?.Invoke();
     }
 
-    public GameStates GetGameState()
+    public void OnRacePaused()
     {
-        return currentState;
+        if (_currentState == GameStates.InMenu)
+        {
+            _previousState = _currentState;
+            _currentState = GameStates.Racing;
+        }
+        else if (_currentState == GameStates.Racing)
+        {
+            _previousState = _currentState;
+            _currentState = GameStates.InMenu;
+        }
+    }
+
+	#region Menu Loaders
+    //make picked scene the current level
+    public void OnLevelPicked(Scene scene)
+    {
+        _selectedLevel = scene;
+        OnStartedLevel();
+    }
+
+    public void OnExitRace()
+    {
+        _previousState = _currentState;
+        _currentState = GameStates.Idle;
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
+    public Scene GetSelectedScene()
+    {
+        return _selectedLevel;
+    }
+    #endregion
+
+	public GameStates GetGameState()
+    {
+        return _currentState;
     }
 }

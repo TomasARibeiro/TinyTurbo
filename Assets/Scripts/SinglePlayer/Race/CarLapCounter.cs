@@ -16,15 +16,15 @@ public class CarLapCounter : MonoBehaviour
 
 			if (checkPoint.IsFinishLine && _passedCheckPointNumber + 1 == checkPoint.CheckPointNumber)
 			{
-				GameManager.instance.OnLapFinished();
+				GameManager.Instance.OnLapFinished();
 				ResetCheckPointsForNewLap();
 			}
-			else if (!checkPoint.IsFinishLine && _passedCheckPointNumber + 1 == checkPoint.CheckPointNumber && _passedCheckPointNumber + 1 <= GameManager.instance.MaxCheckPoints)
+			else if (!checkPoint.IsFinishLine && _passedCheckPointNumber + 1 == checkPoint.CheckPointNumber)
 			{
 				_passedCheckPointNumber = checkPoint.CheckPointNumber;
 				_numberOfPassedCheckPoints++;
 
-				GameManager.instance.OnCheckPointPassed(_numberOfPassedCheckPoints);
+				GameManager.Instance.OnCheckPointPassed(_numberOfPassedCheckPoints);
 			}
 		}
 	}

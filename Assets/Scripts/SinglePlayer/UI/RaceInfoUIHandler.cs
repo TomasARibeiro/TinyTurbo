@@ -10,8 +10,8 @@ public class RaceInfoUIHandler : MonoBehaviour
 
 	private void Awake()
 	{
-		LapCounterText.text = "Lap: " + GameManager.instance.CurrentLap.ToString() + "/" + GameManager.instance.MaxLaps.ToString();
-		CheckPointCounterText.text = "CheckPoint: " + GameManager.instance.CurrentCheckPoint.ToString() + "/" + GameManager.instance.MaxCheckPoints.ToString();
+		LapCounterText.text = "Lap: " + GameManager.Instance.CurrentLap.ToString() + "/" + GameManager.Instance.MaxLaps.ToString();
+		CheckPointCounterText.text = "CheckPoint: " + GameManager.Instance.CurrentCheckPoint.ToString() + "/" + GameManager.Instance.MaxCheckPoints.ToString();
 	}
 
 	private void OnEnable()
@@ -28,12 +28,12 @@ public class RaceInfoUIHandler : MonoBehaviour
 
 	private void HandleCheckPointPassed()
 	{
-		CheckPointCounterText.text = "CheckPoint: " + GameManager.instance.CurrentCheckPoint.ToString() + "/" + GameManager.instance.MaxCheckPoints.ToString();
+		CheckPointCounterText.text = "CheckPoint: " + GameManager.Instance.CurrentCheckPoint.ToString() + "/" + GameManager.Instance.MaxCheckPoints.ToString();
 	}
 
 	private void HandleLapFinished()
 	{
-		LapCounterText.text = "Lap: " + GameManager.instance.CurrentLap.ToString() + "/" + GameManager.instance.MaxLaps.ToString();
-		CheckPointCounterText.text = "CheckPoint: " + GameManager.instance.CurrentCheckPoint.ToString() + "/" + GameManager.instance.MaxCheckPoints.ToString();
+		LapCounterText.text = "Lap: " + GameManager.Instance.CurrentLap.ToString() + "/" + GameManager.Instance.MaxLaps.ToString();
+		CheckPointCounterText.text = "CheckPoint: " + GameManager.Instance.CurrentCheckPoint.ToString() + "/" + GameManager.Instance.MaxCheckPoints.ToString();
 	}
 }

@@ -9,6 +9,6 @@ public class RaceInformation : MonoBehaviour
 
 	private void Awake()
 	{
-		GameManager.instance.OnRaceLoad(_maxLaps, _maxCheckPoints);
+		GameManager.Instance.OnRaceLoad(_maxLaps, _maxCheckPoints);
 	}
 }

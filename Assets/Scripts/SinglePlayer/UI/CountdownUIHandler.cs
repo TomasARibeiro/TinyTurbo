@@ -12,12 +12,17 @@ public class CountdownUIHandler : MonoBehaviour
         CountDownText.text = "";
 	}
 
-	void Start()
-    {
-        StartCoroutine(CountDownCO());
-    }
+	private void OnEnable()
+	{
+        GameManager.E_CountDownBegin += HandleCountDownBegin;
+	}
 
-    IEnumerator CountDownCO()
+	private void OnDisable()
+	{
+		GameManager.E_CountDownBegin -= HandleCountDownBegin;
+	}
+
+	IEnumerator CountDownCO()
     {
         yield return new WaitForSeconds(0.3f);
         int counter = 3;
@@ -29,7 +34,7 @@ public class CountdownUIHandler : MonoBehaviour
             else
             {
                 CountDownText.text = "GO!";
-                GameManager.instance.OnRaceStart();
+                GameManager.Instance.OnRaceStart();
                 break;
             }
 
@@ -39,6 +44,12 @@ public class CountdownUIHandler : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        CountDownText.text = "";
         gameObject.SetActive(false);
+    }
+
+    private void HandleCountDownBegin()
+    {
+        StartCoroutine(CountDownCO());
     }
 }
