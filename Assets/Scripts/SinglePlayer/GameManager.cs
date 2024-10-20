@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     #region Race Events
     public static event Action E_CountDownBegin;
+    public static event Action E_RaceBegin;
 	public static event Action E_CheckPointPassed; //passed a checkpoint
     public static event Action E_LapFinished; //lap finished
     public static event Action E_RaceOver; //the race is over
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour
     public int CurrentLap = 1;
     public int MaxCheckPoints = 0;
     public int MaxLaps = 0;
+    public float RaceStartTime = 0f;
+    public float RaceFinishTime = 0f;
     #endregion
 
     #region Menu Loaders
@@ -71,16 +74,17 @@ public class GameManager : MonoBehaviour
         //player pauses/unpauses the game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (_currentState != GameStates.InMenu) //check if the player isnt already in the menu
+            if (_currentState == GameStates.Racing) //check if the player isnt already in the menu
             {
                 _previousState = _currentState;
-				E_GamePaused?.Invoke();
 				_currentState = GameStates.InMenu;
+				E_GamePaused?.Invoke();
 			}
-            else //if he is, return to the previous state
+            else if (_currentState == GameStates.InMenu) //if he is, return to the previous state
             {
                 _currentState = _previousState;
-                E_GamePaused?.Invoke();
+				_currentState = GameStates.Racing;
+				E_GamePaused?.Invoke();
             }
         }
     }
@@ -106,10 +110,13 @@ public class GameManager : MonoBehaviour
     {
 		Debug.Log("Race Started!");
 
-        E_CameraSwitch?.Invoke();
-        E_SpawnPlayer?.Invoke();
-        _previousState = _currentState;
+		_previousState = _currentState;
 		_currentState = GameStates.Racing;
+
+		E_CameraSwitch?.Invoke();
+        E_SpawnPlayer?.Invoke();
+        E_RaceBegin?.Invoke();
+        RaceStartTime = Time.time;
     }
 
     public void OnRaceLoad(int maxLaps, int maxCheckPoints)
@@ -157,6 +164,11 @@ public class GameManager : MonoBehaviour
     {
         _previousState = _currentState;
         _currentState = GameStates.RaceOver;
+        RaceFinishTime = Time.time;
+        
+        float finalTime = GetRaceTime();
+        SaveHighScore(finalTime);
+
         E_CameraSwitch.Invoke();
         E_RaceOver?.Invoke();
     }
@@ -200,4 +212,45 @@ public class GameManager : MonoBehaviour
     {
         return _currentState;
     }
+
+    public float GetRaceTime()
+    {
+        if (_currentState == GameStates.RaceOver)
+        {
+            return RaceFinishTime - RaceStartTime;
+        }
+        else return Time.time - RaceStartTime;
+    }
+
+	#region SAVING AND LOADING
+    public void SaveHighScore(float newRaceTime)
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        float savedHighScore = PlayerPrefs.GetFloat(currentSceneName, float.MaxValue);
+
+        if (newRaceTime < savedHighScore)
+        {
+            PlayerPrefs.SetFloat(currentSceneName, newRaceTime);
+            PlayerPrefs.Save();
+            Debug.Log("New High Score saved for " + currentSceneName + ": " + newRaceTime);
+        }
+        else
+        {
+            Debug.Log("New race time is slower, not saving.");
+        }
+    }
+
+    public float GetHighScoreForCurrentScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        float highScore = PlayerPrefs.GetFloat(currentSceneName, float.MaxValue);
+
+        if (highScore == float.MaxValue)
+        {
+            Debug.Log("No High Score for " + currentSceneName);
+        }
+
+        return highScore;
+    }
+    #endregion
 }

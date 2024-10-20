@@ -21,7 +21,7 @@ public class PlayerSpawner : MonoBehaviour
 
 	private void HandlePlayerSpawn()
 	{
-		GameObject playerInstance = Instantiate(_player, gameObject.transform.position, Quaternion.identity);
+		GameObject playerInstance = Instantiate(_player, gameObject.transform.position, transform.rotation);
 		E_PlayerReady?.Invoke(playerInstance);
 	}
 }

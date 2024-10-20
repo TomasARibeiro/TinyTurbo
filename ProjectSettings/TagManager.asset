@@ -51,11 +51,11 @@ TagManager:
   - name: Skidmarks
     uniqueID: 3737265307
     locked: 0
-  - name: Player
-    uniqueID: 514680989
-    locked: 0
   - name: Decorations
     uniqueID: 3781645055
+    locked: 0
+  - name: Player
+    uniqueID: 514680989
     locked: 0
   - name: Particles
     uniqueID: 1973073351

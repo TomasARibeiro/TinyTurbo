@@ -36,6 +36,7 @@ Transform:
   - {fileID: 2866785273147446814}
   - {fileID: 5143652497529696020}
   - {fileID: 6886215322843110835}
+  - {fileID: 1778106791541044609}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8184308136536191703
@@ -106,6 +107,37 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!1 &8293953085578233206
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1778106791541044609}
+  m_Layer: 0
+  m_Name: Objects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1778106791541044609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8293953085578233206}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4460079718091215237}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &933158263155907967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -300,6 +332,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4460079718091215237}
     m_Modifications:
+    - target: {fileID: 143790162161241190, guid: de88add8621981946b06a3809e9d748e, type: 3}
+      propertyPath: orthographic size
+      value: 11.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 4263693333663336130, guid: de88add8621981946b06a3809e9d748e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 4263693333663336130, guid: de88add8621981946b06a3809e9d748e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.28
+      objectReference: {fileID: 0}
     - target: {fileID: 5597473531111676583, guid: de88add8621981946b06a3809e9d748e, type: 3}
       propertyPath: m_Name
       value: Cameras
