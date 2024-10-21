@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum MenuStates { MainMenu, GameModeMenu, SettingsMenu, CampaignMenu, TimeTrialMenu, OutlastMenu};
+public enum MenuStates { MainMenu, GameModeMenu, CampaignMenu, TimeTrialMenu, OutlastMenu}; //SettingsMenu
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class MainMenuHandler : MonoBehaviour
 	[SerializeField] private GameObject _campaignMenuPrefab;
 	[SerializeField] private GameObject _timeTrialMenuPrefab;
 	[SerializeField] private GameObject _outlastMenuPrefab;
-	[SerializeField] private GameObject _settingsMenuPrefab;
+	//[SerializeField] private GameObject _settingsMenuPrefab;
 	#endregion
 
 	private void Awake()
@@ -38,12 +38,12 @@ public class MainMenuHandler : MonoBehaviour
 		MenuObjectActivator(_gameModeMenu);
 	}
 
-	public void LoadSettingsMenu()
+	/*public void LoadSettingsMenu()
 	{
 		_previousState = _currentState;
 		_currentState = MenuStates.SettingsMenu;
 		MenuObjectActivator(_settingsMenuPrefab);
-	}
+	}*/
 
 	public void LoadCampaignMenu()
 	{
@@ -87,11 +87,11 @@ public class MainMenuHandler : MonoBehaviour
 				_currentState = MenuStates.GameModeMenu;
 				MenuObjectActivator(_gameModeMenu);
 				break;
-			case MenuStates.SettingsMenu:
+			/*case MenuStates.SettingsMenu:
 				_previousState = _currentState;
 				_currentState = MenuStates.SettingsMenu;
 				MenuObjectActivator(_settingsMenuPrefab);
-				break;
+				break;*/
 			case MenuStates.CampaignMenu:
 				_previousState = _currentState;
 				_currentState = MenuStates.CampaignMenu;
@@ -123,7 +123,7 @@ public class MainMenuHandler : MonoBehaviour
 		_campaignMenuPrefab.SetActive(false);
 		_timeTrialMenuPrefab.SetActive(false);
 		_outlastMenuPrefab.SetActive(false);
-		_settingsMenuPrefab.SetActive(false);
+		//_settingsMenuPrefab.SetActive(false);
 
 		activeMenu.SetActive(true);
 	}

@@ -112,6 +112,11 @@ public class TopDownCarController : MonoBehaviour //NetworkBehaviour
         return Vector2.Dot(transform.right, _carRigidBody2D.velocity);
     }
 
+    public float GetVelocityMagnitude()
+    {
+        return _carRigidBody2D.velocity.magnitude;
+    }
+
 	public bool IsTiresScreeching(out float lateralVelocity, out bool isBraking)
 	{
 		lateralVelocity = GetLateralVelocity();
@@ -125,7 +130,7 @@ public class TopDownCarController : MonoBehaviour //NetworkBehaviour
 		}
 
 		// Check if the car is drifting or sliding sideways
-		float lateralThreshold = 1.0f; // Adjust threshold as needed
+		float lateralThreshold = 3.0f; // Adjust threshold as needed
 		if (Mathf.Abs(lateralVelocity) > lateralThreshold)
 		{
 			return true;
