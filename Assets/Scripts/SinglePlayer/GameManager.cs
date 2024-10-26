@@ -65,11 +65,11 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        /*if (Input.GetKeyDown(KeyCode.E))
         {
             E_CameraSwitch?.Invoke();
 			E_SpawnPlayer?.Invoke();
-        }
+        }*/
 
         //player pauses/unpauses the game
         if (Input.GetKeyDown(KeyCode.Escape))
