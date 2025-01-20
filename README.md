@@ -1,4 +1,4 @@
-Official first draft of the readme
+This project is currently on hold.
 This is a top-down arcade racing game, or at least it will be. The plan here is to make something that I (and other people) can play and share high scores with friends, nothing too serious.
 By the end of the project I'm hoping to have implemented the following aspects:
 - Multiple gamemodes (standard race, time trial, outlast, etc);
